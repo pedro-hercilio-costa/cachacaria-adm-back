@@ -1,23 +1,21 @@
-const express = require('express');  // Importando o express
-const cors = require('cors');  // Importando o cors
-const app = express();  // Inicializando o express
-
+const express = require('express');
+const cors = require('cors');
+const app = express();
 const port = 3001;
 
-//Importa as rotas aqui
-//const firstRoute = require('./routes/firstRoute');
-
+// ✅ Importe as rotas
+const userRoutes = require('./routes/userRoutes');
 
 app.use(cors());
 app.use(express.json());
 
-
+// Teste simples
 app.get('/', (req, res) => {
     res.send('Servidor está funcionando!');
 });
 
-//Use nas rotas aqui
-//app.use('/firstRoute', firstRoute);
+// ✅ Use a rota com o prefixo /api/users
+app.use('/api/users', userRoutes);
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);

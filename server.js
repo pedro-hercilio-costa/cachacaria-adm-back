@@ -1,23 +1,47 @@
-const express = require('express');  // Importando o express
-const cors = require('cors');  // Importando o cors
-const app = express();  // Inicializando o express
+const express = require('express');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const port = 3001;
+const app = express();
+const port = process.env.PORT || 3001;
 
-//Importa as rotas aqui
-//const firstRoute = require('./routes/firstRoute');
-
+// ✅ Importe as rotas
+const userRoutes = require('./routes/userRoutes');
+const authRouter = require('./routes/authController');
 
 app.use(cors());
 app.use(express.json());
 
+// Middleware para verificar token JWT
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ auth: false, message: 'No token provided.' });
+    }
 
-app.get('/', (req, res) => {
-    res.send('Servidor está funcionando!');
+    const token = authHeader.replace('Bearer ', '');
+
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ auth: false, message: 'Failed to authenticate token.' });
+        }
+
+        // Você pode anexar dados do usuário à requisição, se quiser
+        req.userId = decoded.id;
+        req.userRole = decoded.role; // se tiver role no token
+        next();
+    });
+}
+
+// Teste simples protegido com autenticação
+app.get('/', verifyJWT, (req, res) => {
+    res.send('Servidor está funcionando e você está autenticado!');
 });
 
-//Use nas rotas aqui
-//app.use('/firstRoute', firstRoute);
+// ✅ Use as rotas
+app.use('/auth', authRouter);
+app.use('/api/users', userRoutes);
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);

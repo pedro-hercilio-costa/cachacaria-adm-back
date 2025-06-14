@@ -2,7 +2,7 @@ const pool = require('../db'); // Certifique-se que o db.js exporta a pool do Po
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM "cachacaria_adm"."usuario" ORDER BY id ASC');
+    const result = await pool.query('SELECT * FROM usuario ORDER BY id ASC');
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: 'Erro ao buscar usuários' });
@@ -14,7 +14,7 @@ exports.createUser = async (req, res) => {
 
   try {
     const result = await pool.query(
-      'INSERT INTO "cachacaria_adm"."usuario" (email, senha) VALUES ($1, $2) RETURNING *',
+      'INSERT INTO usuario (email, senha) VALUES ($1, $2) RETURNING *',
       [email, senha]
     );
     res.status(201).json(result.rows[0]);
@@ -33,7 +33,7 @@ exports.updateUser = async (req, res) => {
 
   try {
     const result = await pool.query(
-      'UPDATE "cachacaria_adm"."usuario" SET email = $1, senha = $2 WHERE id = $3 RETURNING *',
+      'UPDATE usuario SET email = $1, senha = $2 WHERE id = $3 RETURNING *',
       [email, senha, id]
     );
     res.json(result.rows[0]);
@@ -46,7 +46,7 @@ exports.deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await pool.query('DELETE FROM "cachacaria_adm"."usuario" WHERE id = $1', [id]);
+    await pool.query('DELETE FROM usuario WHERE id = $1', [id]);
     res.status(204).send();
   } catch (err) {
     res.status(500).json({ error: 'Erro ao deletar usuário' });

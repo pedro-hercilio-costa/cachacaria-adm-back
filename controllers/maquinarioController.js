@@ -1,0 +1,38 @@
+const pool = require('../db');
+
+// Criação de maquinário
+const criarMaquinario = async (req, res) => {
+  const { nome, aquisicao } = req.body;
+
+  if (!nome || !aquisicao) {
+    return res.status(400).json({ error: 'Nome e data de aquisição são obrigatórios.' });
+  }
+
+  try {
+    const result = await pool.query(
+      'INSERT INTO cachacaria_adm.maquinario (nome, dataaquisicao) VALUES ($1, $2) RETURNING *',
+      [nome, aquisicao]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Erro ao criar maquinário:', err);
+    res.status(500).json({ error: 'Erro ao salvar o maquinário.' });
+  }
+};
+
+// Listagem de maquinários (opcional, se quiser usar)
+const listarMaquinarios = async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM cachacaria_adm.maquinario ORDER BY id');
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Erro ao listar maquinários:', err);
+    res.status(500).json({ error: 'Erro ao buscar maquinários.' });
+  }
+};
+
+module.exports = {
+  criarMaquinario,
+  listarMaquinarios, // pode remover se não quiser ainda
+};

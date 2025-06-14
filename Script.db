@@ -192,6 +192,10 @@ CREATE TABLE  "cachacaria_adm"."identificacao" (
     REFERENCES "cachacaria_adm"."cidade" ("id"))
 ;
 
+ALTER TABLE cachacaria_adm.identificacao
+ADD COLUMN cliente smallint DEFAULT 0,
+ADD COLUMN fornecedor smallint DEFAULT 0;
+
 
 -- -----------------------------------------------------
 -- Table "cachacaria_adm"."composicao"

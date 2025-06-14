@@ -9,6 +9,12 @@ const port = process.env.PORT || 3001;
 // ✅ Importe as rotas
 const userRoutes = require('./routes/userRoutes');
 const authRouter = require('./routes/authController');
+const productRoute = require('./routes/productRoutes')
+const unidadeRoutes = require('./routes/unidadeRoutes');
+const saborRoutes = require('./routes/saborRoutes');
+const categoriaRoutes = require('./routes/categoriaRoutes');
+const composicaoRoutes = require('./routes/composicaoRoute');
+
 
 app.use(cors());
 app.use(express.json());
@@ -39,9 +45,17 @@ app.get('/', verifyJWT, (req, res) => {
     res.send('Servidor está funcionando e você está autenticado!');
 });
 
+
+
+
 // ✅ Use as rotas
 app.use('/auth', authRouter);
 app.use('/api/users', userRoutes);
+app.use('/api/products', productRoute);
+app.use('/api/unidades', unidadeRoutes);
+app.use('/api/sabores', saborRoutes);
+app.use('/api/categorias', categoriaRoutes);
+app.use('/api/composicao', composicaoRoutes);
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);

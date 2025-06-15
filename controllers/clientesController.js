@@ -1,4 +1,4 @@
-const pool = require('../db'); // Ajuste para seu arquivo de conexão com o banco
+const pool = require('../db'); 
 
 // Listar todos os clientes
 const getClientes = async (req, res) => {

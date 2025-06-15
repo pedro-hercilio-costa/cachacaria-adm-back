@@ -180,12 +180,6 @@ CREATE TABLE "identificacao" (
     FOREIGN KEY ("idf_cidade")
     REFERENCES "cidade" ("id"));
 
-
-ALTER TABLE cachacaria_adm.identificacao
-ADD COLUMN cliente smallint DEFAULT 0,
-ADD COLUMN fornecedor smallint DEFAULT 0;
-
-
 -- -----------------------------------------------------
 -- Table "composicao"
 -- -----------------------------------------------------
@@ -390,6 +384,14 @@ CREATE TABLE "manutencao_maquinario" (
     ON UPDATE NO ACTION)
 ;
 
+ALTER TABLE manutencao_maquinario
+DROP CONSTRAINT fk_manutencao_maquinario_maquinario1;
+
+ALTER TABLE manutencao_maquinario
+ADD CONSTRAINT fk_manutencao_maquinario_maquinario1
+FOREIGN KEY (idf_maquinario)
+REFERENCES maquinario(id)
+ON DELETE CASCADE;
 
 -- -----------------------------------------------------
 -- Table "condicao_utensilio"

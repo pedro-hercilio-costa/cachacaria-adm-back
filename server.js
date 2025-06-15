@@ -44,7 +44,7 @@ function verifyJWT(req, res, next) {
             return res.status(401).json({ auth: false, message: 'Failed to authenticate token.' });
         }
 
-        // Você pode anexar dados do usuário à requisição, se quiser
+        // Aanexar dados do usuário à requisição, se quiser
         req.userId = decoded.id;
         req.userRole = decoded.role; // se tiver role no token
         next();
@@ -59,7 +59,7 @@ app.get('/', verifyJWT, (req, res) => {
 
 
 
-// ✅ Use as rotas
+// Usar as rotas
 app.use('/auth', authRouter);
 app.use('/api/users', userRoutes);
 

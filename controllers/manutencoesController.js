@@ -39,6 +39,17 @@ const getManutencoes = async (req, res) => {
   }
 };
 
+const getManutencaoById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM manutencao_maquinario WHERE id = $1', [id]);
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao buscar manutenção' });
+  }
+};
+
 const createManutencao = async (req, res) => {
   try {
     const {
@@ -86,7 +97,44 @@ const createManutencao = async (req, res) => {
   }
 };
 
+const updateManutencao = async (req, res) => {
+  const { id } = req.params;
+  const {
+    idf_maquinario, idf_tipomanutencao, idf_usuario,
+    datamanutencao, descricao, custo,
+    proximamanutencao, obersvacao
+  } = req.body;
+  const query = `
+    UPDATE manutencao_maquinario
+    SET idf_tipomanutencao=$1, idf_usuario=$2,
+        datamanutencao=$3, descricao=$4,custo=$5,
+        proximamanutencao=$6, obersvacao=$7
+    WHERE id = $8 RETURNING *`;
+  const values = [idf_tipomanutencao,idf_usuario,datamanutencao,
+    descricao,custo,proximamanutencao,obersvacao,id];
+  try {
+    const result = await pool.query(query, values);
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao atualizar manutenção' });
+  }
+};
+
+const deleteManutencao = async (req, res) => {
+  try {
+    await pool.query('DELETE FROM manutencao_maquinario WHERE id = $1', [req.params.id]);
+    res.status(204).end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao excluir manutenção' });
+  }
+};
+
 module.exports = {
   getManutencoes,
-  createManutencao
+  getManutencaoById,
+  createManutencao,
+  updateManutencao,
+  deleteManutencao
 };

@@ -24,7 +24,7 @@ const criarMaquinario = async (req, res) => {
 // Listagem de maquinários (opcional, se quiser usar)
 const listarMaquinarios = async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM maquinario ORDER BY id');
+    const result = await pool.query('SELECT * FROM maquinario ORDER BY nome');
     res.status(200).json(result.rows);
   } catch (err) {
     console.error('Erro ao listar maquinários:', err);

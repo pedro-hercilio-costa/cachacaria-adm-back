@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
 // Listar todos os maquinários (GET)
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM maquinario ORDER BY id');
+    const result = await pool.query('SELECT * FROM maquinario ORDER BY nome');
     res.status(200).json(result.rows);
   } catch (err) {
     console.error('Erro ao listar maquinários:', err);

@@ -9,7 +9,7 @@ router.post('/login', async (req, res) => {
         const client = await pool.connect();
 
         const user = await client.query(
-            'SELECT * FROM "cachacaria_adm"."usuario" WHERE email = $1 AND senha = $2',
+            'SELECT * FROM "usuario" WHERE email = $1 AND senha = $2',
             [email, password]
         );
 

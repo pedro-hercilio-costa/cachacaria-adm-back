@@ -11,12 +11,21 @@ const port = process.env.PORT || 3001;
 //  Importe as rotas
 const userRoutes = require('./routes/userRoutes');
 const authRouter = require('./routes/authController');
+
 const clientesRoutes = require('./routes/clientesRoutes');
 const fornecedoresRoutes = require('./routes/fornecedoresRoutes.js');
 const maquinarioRoutes = require('./routes/maquinarioRoutes');
 const manutencoesRoutes = require('./routes/manutencoesRoutes');
 const tiposManutencaoRoutes = require('./routes/tiposManutencaoRoutes');
 const locaisRoutes = require('./routes/locaisRoutes');
+
+const productRoute = require('./routes/productRoutes')
+const unidadeRoutes = require('./routes/unidadeRoutes');
+const saborRoutes = require('./routes/saborRoutes');
+const categoriaRoutes = require('./routes/categoriaRoutes');
+const composicaoRoutes = require('./routes/composicaoRoute');
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -47,15 +56,26 @@ app.get('/', verifyJWT, (req, res) => {
     res.send('Servidor está funcionando e você está autenticado!');
 });
 
+
+
+
 // ✅ Use as rotas
 app.use('/auth', authRouter);
 app.use('/api/users', userRoutes);
+
 app.use('/api/clientes', clientesRoutes);
 app.use('/api/fornecedores', fornecedoresRoutes);
 app.use('/api/maquinario', maquinarioRoutes);
 app.use('/api/manutencoes', manutencoesRoutes);
 app.use('/api/tipos-manutencao', tiposManutencaoRoutes);
 app.use('/api', locaisRoutes);
+
+app.use('/api/products', productRoute);
+app.use('/api/unidades', unidadeRoutes);
+app.use('/api/sabores', saborRoutes);
+app.use('/api/categorias', categoriaRoutes);
+app.use('/api/composicao', composicaoRoutes);
+
 
 app.listen(port, () => {
         pool.query('SELECT NOW()')

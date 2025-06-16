@@ -24,8 +24,9 @@ const unidadeRoutes = require('./routes/unidadeRoutes');
 const saborRoutes = require('./routes/saborRoutes');
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const composicaoRoutes = require('./routes/composicaoRoute');
-
-
+const producaoRoutes = require('./routes/producaoRoutes.js');
+const compravendaRoutes = require('./routes/compra_vendaRoutes.js');
+const estoqueRoutes = require('./routes/estoqueRoutes.js');
 
 app.use(cors());
 app.use(express.json());
@@ -75,6 +76,9 @@ app.use('/api/unidades', unidadeRoutes);
 app.use('/api/sabores', saborRoutes);
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/composicao', composicaoRoutes);
+app.use('/api/producao', producaoRoutes);
+app.use('/api/compravenda', compravendaRoutes);
+app.use('/api/estoque', estoqueRoutes);
 
 
 app.listen(port, () => {

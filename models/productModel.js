@@ -164,6 +164,21 @@ const Product = {
             throw error;
         }
     },
+
+    getProdPreco: async () => {
+        const query = `
+            SELECT A.ID, A.DESCRICAO, A.PRECO, B.CODIGO FROM PRODUTO A
+            INNER JOIN LOTE B ON B.IDF_PRODUTO = A.ID
+            ORDER BY A.ID DESC`;
+
+        try {
+            const result = await db.query(query);
+            return result.rows;
+        } catch (error) {
+            console.error('Erro ao retornar produtos:', error);
+            throw new Error('Erro ao retornar produtos do banco de dados');
+        }
+    },
 };
 
 module.exports = Product;

@@ -7,10 +7,6 @@ router.get('/:IdProduct', productController.getProductByID);
 router.delete('/:IdProduct', productController.deleteProduct); 
 router.put('/edit/:IdProduct', productController.updateProduct);
 router.post('/new', productController.insertProduct);
-
-//exemplos antigos
-//router.put('/:IdProduct', cartController.updateProduct); 
-//router.delete('/', cartController.deleteCart); 
-//router.post('/insertItem', cartController.insertItemCart); 
+router.get('/produto/preco', productController.getProdPreco);
 
 module.exports = router;

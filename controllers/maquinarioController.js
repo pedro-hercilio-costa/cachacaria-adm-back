@@ -9,9 +9,13 @@ const criarMaquinario = async (req, res) => {
   }
 
   try {
+
+    const dataAjustada = new Date(aquisicao);
+    dataAjustada.setHours(dataAjustada.getHours() + 3);
+
     const result = await pool.query(
       'INSERT INTO maquinario (nome, dataaquisicao) VALUES ($1, $2) RETURNING *',
-      [nome, aquisicao]
+      [nome, dataAjustada]
     );
 
     res.status(201).json(result.rows[0]);

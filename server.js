@@ -27,6 +27,7 @@ const composicaoRoutes = require('./routes/composicaoRoute');
 const producaoRoutes = require('./routes/producaoRoutes.js');
 const compravendaRoutes = require('./routes/compra_vendaRoutes.js');
 const estoqueRoutes = require('./routes/estoqueRoutes.js');
+const relatoriosRoutes = require('./routes/relatorios');
 
 app.use(cors());
 app.use(express.json());
@@ -61,6 +62,7 @@ app.get('/', verifyJWT, (req, res) => {
 
 
 // Usar as rotas
+app.use('/relatorios', relatoriosRoutes);
 app.use('/auth', authRouter);
 app.use('/api/users', userRoutes);
 

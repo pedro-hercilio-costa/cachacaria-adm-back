@@ -169,17 +169,19 @@ const CompraVenda = {
         INSERT INTO saldo_produto (
           idf_produto,
           idf_lote,
+          idf_compravenda,
           qtdmov,
           dtamov,
           origemmovimento,
           natureza,
           nrodocto
-        ) VALUES ($1, $2, $3, NOW(), $4, $5, $6)
+        ) VALUES ($1, $2, $3, $4, NOW(), $5, $6, $7)
       `;
 
                 await client.query(insertSaldoQuery, [
                     item.idf_produto,
                     item.idf_lote,
+                    idCompraVenda,
                     (item.qtdmov * -1),
                     'Documento Nota de Venda',
                     'SAI',
@@ -265,19 +267,21 @@ const CompraVenda = {
         INSERT INTO saldo_produto (
           idf_produto,
           idf_lote,
+          idf_compravenda,
           qtdmov,
           dtamov,
           origemmovimento,
           natureza,
           nrodocto
-        ) VALUES ($1, $2, $3, NOW(), $4, $5, $6)
+        ) VALUES ($1, $2, $3, $4, NOW(), $5, $6, $7)
       `;
 
                 await client.query(insertSaldoQuery, [
                     item.idf_produto,
                     item.idf_lote,
-                    (item.qtdmov*-1),
-                    'Documento Nota Compra',
+                    idCompraVenda,
+                    (item.qtdmov * -1),
+                    'Documento Nota de Compra',
                     'ENT',
                     newDocto.nrodocto
                 ]);
@@ -292,6 +296,75 @@ const CompraVenda = {
             client.release();
         }
     },
+
+    deleteDoctoVenda: async (idCompraVenda) => {
+        const client = await db.connect();
+        try {
+            await client.query('BEGIN');
+
+            // Exclui os itens da venda
+            await client.query(`
+            DELETE FROM item_compra_venda
+            WHERE idf_compravenda = $1
+        `, [idCompraVenda]);
+
+            //remove saldo relacionado
+            await client.query(`
+            DELETE FROM saldo_produto
+            WHERE origemmovimento = 'Documento Nota de Venda'
+            AND idf_compravenda = $1
+        `, [idCompraVenda]);
+
+            // Exclui o documento principal
+            await client.query(`
+            DELETE FROM compra_venda
+            WHERE id = $1
+        `, [idCompraVenda]);
+
+            await client.query('COMMIT');
+        } catch (error) {
+            await client.query('ROLLBACK');
+            console.error('Erro no delete de venda:', error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+
+    deleteDoctoCompra: async (idCompraVenda) => {
+        const client = await db.connect();
+        try {
+            await client.query('BEGIN');
+
+            // Exclui os itens da compra
+            await client.query(`
+            DELETE FROM item_compra_venda
+            WHERE idf_compravenda = $1
+        `, [idCompraVenda]);
+
+            //remove saldo relacionado
+            await client.query(`
+            DELETE FROM saldo_produto
+            WHERE origemmovimento = 'Documento Nota de Compra'
+            AND idf_compravenda = $1
+        `, [idCompraVenda]);
+
+            // Exclui o documento principal
+            await client.query(`
+            DELETE FROM compra_venda
+            WHERE id = $1
+        `, [idCompraVenda]);
+
+            await client.query('COMMIT');
+        } catch (error) {
+            await client.query('ROLLBACK');
+            console.error('Erro no delete de compra:', error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+
 
 };
 

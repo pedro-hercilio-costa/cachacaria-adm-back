@@ -9,5 +9,7 @@ router.get('/venda/cli', compravendaController.getAllCliente);
 router.get('/compra/for', compravendaController.getAllFornecedor);
 router.post('/new/venda', compravendaController.insertDoctoVenda);
 router.post('/new/compra', compravendaController.insertDoctoCompra);
+router.delete('/venda/:id', compravendaController.deleteDoctoVenda);
+router.delete('/compra/:id', compravendaController.deleteDoctoCompra);
 
 module.exports = router;

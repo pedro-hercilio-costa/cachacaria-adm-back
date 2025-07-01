@@ -89,7 +89,7 @@ const Producao = {
 
             const nroDocumento = await Producao.getNextOrdemNumero();
 
-            // 1️⃣ INSERT INTO producao
+            // INSERT INTO producao
             const insertOrdemQuery = `
       INSERT INTO producao (
         nroordemproducao, dtaproducao, dtavalidade,
@@ -110,7 +110,7 @@ const Producao = {
             const resOrdem = await client.query(insertOrdemQuery, ordemValues);
             const idProducaoGerado = resOrdem.rows[0].id;
 
-            // 2️⃣ INSERT INTO lote (registro do lote gerado para o produto produzido)
+            // INSERT INTO lote (registro do lote gerado para o produto produzido)
             const insertLoteQuery = `
       INSERT INTO lote (
         codigo,
@@ -131,7 +131,7 @@ const Producao = {
             const resLote = await client.query(insertLoteQuery, loteValues);
             const idLoteGerado = resLote.rows[0].id;
 
-            // 3️⃣ INSERT INTO saldo → entrada do produto produzido
+            // INSERT INTO saldo → entrada do produto produzido
             const insertSaldoProducaoQuery = `
         INSERT INTO saldo_produto (
           qtdmov,
@@ -140,8 +140,9 @@ const Producao = {
           origemmovimento,
           natureza,
           idf_produto,
-          idf_lote
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+          idf_lote,
+          idProducaoGerado
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
             const saldoProducaoValues = [
                 safeParseInt(newDocto.quantidadeProduzida),
@@ -150,11 +151,12 @@ const Producao = {
                 'Documento Ordem de Produção',
                 'ENT',
                 safeParseInt(newDocto.idf_produto), 
-                idLoteGerado
+                idLoteGerado,
+                idProducaoGerado
             ];
             await client.query(insertSaldoProducaoQuery, saldoProducaoValues);
 
-            // 4️⃣ INSERT INTO item_producao e saldo de saída (baixa dos insumos)
+            // INSERT INTO item_producao e saldo de saída (baixa dos insumos)
             for (const item of newDocto.composicao) {
                 const insertItemQuery = `
         INSERT INTO item_producao (

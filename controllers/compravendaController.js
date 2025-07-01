@@ -111,6 +111,31 @@ const compravendaController = {
         }
     },
 
+    deleteDoctoVenda: async (req, res) => {
+        const id = req.params.id;
+
+        try {
+            await compravendatModel.deleteDoctoVenda(id);
+            return res.status(200).json({ message: 'Documento de venda excluído com sucesso.' });
+        } catch (error) {
+            console.error('Erro ao excluir documento de venda:', error);
+            return res.status(500).json({ message: 'Erro ao excluir documento no banco de dados.' });
+        }
+    },
+
+    deleteDoctoCompra: async (req, res) => {
+        const id = req.params.id;
+
+        try {
+            await compravendatModel.deleteDoctoCompra(id);
+            return res.status(200).json({ message: 'Documento de compra excluído com sucesso.' });
+        } catch (error) {
+            console.error('Erro ao excluir documento de compra:', error);
+            return res.status(500).json({ message: 'Erro ao excluir documento no banco de dados.' });
+        }
+    },
+
+
 };
 
 module.exports = compravendaController;

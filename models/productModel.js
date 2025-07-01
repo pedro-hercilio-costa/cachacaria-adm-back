@@ -10,6 +10,48 @@ const Product = {
                    C.NOME SABOR, A.IDF_UNIDADE, D.NOME UNIDADE
             FROM PRODUTO A
             INNER JOIN CATEGORIA B ON B.ID = A.IDF_CATEGORIA
+            LEFT JOIN SABOR C ON C.ID = A.IDF_SABOR
+            INNER JOIN UNIDADE D ON D.ID = A.IDF_UNIDADE
+        `;
+
+        try {
+            const result = await db.query(query);
+            return result.rows;
+        } catch (error) {
+            console.error('Erro ao retornar produtos:', error);
+            throw new Error('Erro ao retornar produtos do banco de dados');
+        }
+    },
+
+    getIngredientes: async () => {
+        const query = `
+            SELECT A.ID ID_PRODUTO, A.CODIGO, A.DESCRICAO, A.ATIVO, A.TEMCOMPOSICAO,
+                   A.PRECO, A.CAPACIDADE_ML, A.CUSTO, A.ESTOQUEMINIMO, A.CODIGOEAN, A.CODIGOBARRAS,
+                   A.DTACADASTRO, A.DTAALTERACAO, A.IDF_CATEGORIA, B.NOME CATEGORIA,
+                   A.IDF_UNIDADE, D.NOME UNIDADE
+            FROM PRODUTO A
+            INNER JOIN CATEGORIA B ON B.ID = A.IDF_CATEGORIA            
+            INNER JOIN UNIDADE D ON D.ID = A.IDF_UNIDADE
+			WHERE A.IDF_CATEGORIA = 5
+        `;
+
+        try {
+            const result = await db.query(query);
+            return result.rows;
+        } catch (error) {
+            console.error('Erro ao retornar produtos:', error);
+            throw new Error('Erro ao retornar produtos do banco de dados');
+        }
+    },
+
+    getProduzidos: async () => {
+        const query = `
+            SELECT A.ID ID_PRODUTO, A.CODIGO, A.DESCRICAO, A.ATIVO, A.TEMCOMPOSICAO,
+                   A.PRECO, A.CAPACIDADE_ML, A.CUSTO, A.ESTOQUEMINIMO, A.CODIGOEAN, A.CODIGOBARRAS,
+                   A.DTACADASTRO, A.DTAALTERACAO, A.IDF_CATEGORIA, B.NOME CATEGORIA, A.IDF_SABOR,
+                   C.NOME SABOR, A.IDF_UNIDADE, D.NOME UNIDADE
+            FROM PRODUTO A
+            INNER JOIN CATEGORIA B ON B.ID = A.IDF_CATEGORIA
             INNER JOIN SABOR C ON C.ID = A.IDF_SABOR
             INNER JOIN UNIDADE D ON D.ID = A.IDF_UNIDADE
         `;
@@ -169,6 +211,7 @@ const Product = {
         const query = `
             SELECT A.ID, A.DESCRICAO, A.PRECO, B.CODIGO FROM PRODUTO A
             INNER JOIN LOTE B ON B.IDF_PRODUTO = A.ID
+            WHERE A.IDF_CATEGORIA <> 5
             ORDER BY A.ID DESC`;
 
         try {

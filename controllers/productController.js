@@ -19,6 +19,42 @@ const productController = {
         }
     },
 
+    getIngredientes: async (req, res) => {
+        try {
+            // Busca produtos no model
+            const productItems = await productModel.getIngredientes();
+
+            // Verifique se há itens no retorno
+            if (productItems.length === 0) {
+                return res.status(200).json({ message: 'EmptyList' });
+            }
+
+            // Retornando os produtos
+            return res.status(200).json(productItems);
+        } catch (error) {
+            console.error('Erro ao buscar produtos:', error);
+            return res.status(500).json({ message: 'Erro ao buscar produtos no banco de dados' });
+        }
+    },
+
+    getProduzidos: async (req, res) => {
+        try {
+            // Busca produtos no model
+            const productItems = await productModel.getProduzidos();
+
+            // Verifique se há itens no retorno
+            if (productItems.length === 0) {
+                return res.status(200).json({ message: 'EmptyList' });
+            }
+
+            // Retornando os produtos
+            return res.status(200).json(productItems);
+        } catch (error) {
+            console.error('Erro ao buscar produtos:', error);
+            return res.status(500).json({ message: 'Erro ao buscar produtos no banco de dados' });
+        }
+    },
+
     getProductByID: async (req, res) => {
         const { IdProduct } = req.params;
         try {
@@ -102,9 +138,9 @@ const productController = {
     },
 
     getProdPreco: async (req, res) => {
-        try {            
+        try {
             const productItems = await productModel.getProdPreco();
-            
+
             if (productItems.length === 0) {
                 return res.status(200).json({ message: 'EmptyList' });
             }

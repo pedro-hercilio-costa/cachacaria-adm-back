@@ -25,21 +25,20 @@ O objetivo deste projeto é fornecer uma API RESTful robusta que permite realiza
 
 ```
 src/
-├── config/          # Configurações (ex: banco de dados, autenticação)
 ├── controllers/     # Lógica dos endpoints
 ├── models/          # Definição das entidades via Sequelize
 ├── routes/          # Definição das rotas da API
-├── middlewares/     # Middlewares (ex: autenticação)
-└── index.js         # Ponto de entrada da aplicação
+├── db.js            # Configurações de banco de dados
+└── server.js        # Ponto de entrada da aplicação
 ```
 
 ## ✅ Funcionalidades Principais
 
 - Cadastro e autenticação de usuários
 - Cadastro, edição e exclusão de produtos
-- Registro e atualização de pedidos
+- Registro de movimentações (compras e vendas)
 - Geração de relatórios administrativos
-- Proteção de rotas com autenticação JWT
+- Autenticação com JWT
 
 ## ▶️ Como Executar Localmente
 
@@ -65,13 +64,11 @@ npm start
 
 - Node.js
 - MySQL / PostgreSQL
-- Sequelize CLI (opcional, se usar migrações)
 
 ## 📌 Próximas Melhorias
 
 - Implementação de testes unitários e de integração
-- Documentação com Swagger
-- Deploy na nuvem (Heroku, Vercel, etc)
+- Deploy na nuvem (Railway, Vercel, Render,etc)
 
 ## 📄 Licença
 

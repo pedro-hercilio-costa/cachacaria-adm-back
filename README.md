@@ -41,19 +41,22 @@ src/
 
 ## ▶️ Como Executar Localmente
 
-1. Clone o repositório:
+1. Instale o Node.js em seu computador:
+https://nodejs.org/pt/download/current
+
+2. Clone o repositório:
 
 ```bash
 git clone https://github.com/pedro-hercilio-costa/cachacaria-adm-back.git
 ```
 
-2. Instale as dependências:
+3. Instale as dependências:
 
 ```bash
 npm install jsonwebtoken
 ```
 
-3. Inicie o servidor:
+4. Inicie o servidor:
 
 ```bash
 npm start

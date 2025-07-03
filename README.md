@@ -50,7 +50,7 @@ git clone https://github.com/pedro-hercilio-costa/cachacaria-adm-back.git
 2. Instale as dependências:
 
 ```bash
-npm install
+npm install jsonwebtoken
 ```
 
 3. Inicie o servidor:

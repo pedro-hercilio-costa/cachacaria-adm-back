@@ -18,7 +18,6 @@ O objetivo deste projeto é fornecer uma API RESTful robusta que permite realiza
 - **Express.js** - Framework web minimalista para Node.js.
 - **MySQL / PostgreSQL / SQLite (dependendo do seu projeto)** - Sistema de gerenciamento de banco de dados relacional.
 - **JWT (JSON Web Token)** - Para autenticação e controle de acesso.
-- **dotenv** - Para gerenciamento de variáveis de ambiente.
 
 ## 📂 Estrutura de Pastas
 

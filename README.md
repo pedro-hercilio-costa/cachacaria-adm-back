@@ -55,15 +55,7 @@ git clone https://github.com/pedro-hercilio-costa/cachacaria-adm-back.git
 npm install
 ```
 
-3. Configure as variáveis de ambiente no arquivo `.env`.
-
-4. Execute as migrações (se aplicável):
-
-```bash
-npx sequelize db:migrate
-```
-
-5. Inicie o servidor:
+3. Inicie o servidor:
 
 ```bash
 npm start

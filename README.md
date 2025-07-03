@@ -7,8 +7,9 @@ Este projeto é o backend da aplicação **Cachaçaria ADM**, um sistema de gest
 
 O objetivo deste projeto é fornecer uma API RESTful robusta que permite realizar operações CRUD (Create, Read, Update, Delete) sobre os principais recursos do sistema, como:
 
-- Produtos (bebidas, cachaças, etc)
-- Pedidos
+- Produtos (bebidas, ingredientes, etc)
+- Consulta de Estoque
+- Compras e Vendas
 - Usuários / Autenticação
 - Relatórios administrativos
 
@@ -61,7 +62,7 @@ npm start
 ## 🛠️ Requisitos
 
 - Node.js
-- MySQL / PostgreSQL
+- PostgreSQL
 
 ## 📌 Próximas Melhorias
 

@@ -60,6 +60,17 @@ const producaoController = {
         }
     },
 
+    deleteDocto: async (req, res) => {
+        const id = req.params.id;
+
+        try {
+            await producaoModel.deleteDocto(id);
+            return res.status(200).json({ message: 'Ordem de produção excluída com sucesso.' });
+        } catch (error) {
+            console.error('Erro ao excluir ordem de produção:', error);
+            return res.status(500).json({ message: 'Erro ao excluir ordem de produção.' });
+        }
+    },
 };
 
 module.exports = producaoController;

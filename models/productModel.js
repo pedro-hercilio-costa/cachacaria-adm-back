@@ -134,7 +134,7 @@ const Product = {
                 updatedProduct.codigoean,
                 updatedProduct.codigobarras,
                 parseInt(updatedProduct.idf_categoria ?? 0),
-                parseInt(updatedProduct.idf_sabor ?? 0),
+                isNaN(parseInt(updatedProduct.idf_sabor)) ? null : parseInt(updatedProduct.idf_sabor),
                 parseInt(updatedProduct.idf_unidade ?? 0),
                 parseInt(IdProduct)
             ];
@@ -194,7 +194,7 @@ const Product = {
             newProduct.codigoean,
             newProduct.codigobarras,
             parseInt(newProduct.idf_categoria ?? 0),
-            parseInt(newProduct.idf_sabor ?? 0),
+            isNaN(parseInt(newProduct.idf_sabor)) ? null : parseInt(newProduct.idf_sabor),
             parseInt(newProduct.idf_unidade ?? 0)
         ];
 
@@ -209,7 +209,7 @@ const Product = {
 
     getProdPreco: async () => {
         const query = `
-            SELECT A.ID, A.DESCRICAO, A.PRECO, B.CODIGO FROM PRODUTO A
+            SELECT A.ID, A.DESCRICAO, A.PRECO, B.CODIGO, B.ID IDF_LOTE FROM PRODUTO A
             INNER JOIN LOTE B ON B.IDF_PRODUTO = A.ID
             WHERE A.IDF_CATEGORIA <> 5
             ORDER BY A.ID DESC`;

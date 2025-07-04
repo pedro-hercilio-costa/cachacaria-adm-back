@@ -103,7 +103,7 @@ const Producao = {
                 newDocto.dataValidade,
                 newDocto.quantidadeProduzida,
                 newDocto.custoProducao,
-                safeParseInt(newDocto.codigoLote),
+                newDocto.codigoLote,
                 safeParseInt(newDocto.idf_produto),
                 safeParseInt(newDocto.usuario)
             ];
@@ -141,7 +141,7 @@ const Producao = {
           natureza,
           idf_produto,
           idf_lote,
-          idProducaoGerado
+          idf_producao
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
             const saldoProducaoValues = [
@@ -150,7 +150,7 @@ const Producao = {
                 nroDocumento,
                 'Documento Ordem de Produção',
                 'ENT',
-                safeParseInt(newDocto.idf_produto), 
+                safeParseInt(newDocto.idf_produto),
                 idLoteGerado,
                 idProducaoGerado
             ];
@@ -187,8 +187,9 @@ const Producao = {
           origemmovimento,
           natureza,
           idf_produto,
-          idf_lote
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+          idf_lote,
+          idf_producao
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
                 const saldoValues = [
                     parseFloat(item.qtdrequisitado ?? 0),
@@ -197,7 +198,8 @@ const Producao = {
                     'Documento Ordem de Produção',
                     'SAI',
                     safeParseInt(item.idf_produtocomposicao ?? item.id),
-                    null
+                    null,
+                    safeParseInt(idProducaoGerado)
                 ];
                 await client.query(insertSaldoQuery, saldoValues);
             }
@@ -212,6 +214,54 @@ const Producao = {
         }
     },
 
+    deleteDocto: async (idProducao) => {
+        const client = await db.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            await client.query(`
+            DELETE FROM item_producao
+            WHERE idf_producao = $1
+        `, [idProducao]);
+
+            const lotesResult = await client.query(`
+            SELECT DISTINCT idf_lote
+            FROM saldo_produto
+            WHERE origemmovimento = 'Documento Ordem de Produção'
+              AND idf_producao = $1
+              AND idf_lote IS NOT NULL
+        `, [idProducao]);
+
+            const idsLotes = lotesResult.rows.map(row => row.idf_lote);
+
+            await client.query(`
+            DELETE FROM saldo_produto
+            WHERE origemmovimento = 'Documento Ordem de Produção'
+              AND idf_producao = $1
+        `, [idProducao]);
+
+            if (idsLotes.length > 0) {
+                await client.query(`
+                DELETE FROM lote
+                WHERE id = ANY($1)
+            `, [idsLotes]);
+            }
+            
+            await client.query(`
+            DELETE FROM producao
+            WHERE id = $1
+        `, [idProducao]);
+
+            await client.query('COMMIT');
+        } catch (error) {
+            await client.query('ROLLBACK');
+            console.error('Erro no delete da produção:', error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
 
 };
 
